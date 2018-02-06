@@ -1,7 +1,7 @@
 var canvas = document.getElementById('canvas');
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
-canvas.style.backgroundColor = 'gray'
+canvas.style.backgroundColor = '#0e0e0e'
 
 window.requestAnimFrame = (function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
@@ -9,15 +9,22 @@ window.requestAnimFrame = (function() {
   };
 })();
 
+window.addEventListener('resize',function(){
+  setTimeout(()=>{
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+  },10)
+})
+
 var ctx = canvas.getContext('2d');
 
 
 
 class Partical{
   constructor(x,y,r,color,counter){
-    this.y =0 || y;
-    this.x =0 || x;
-    this.r =10 || r;
+    this.y = 0 || y;
+    this.x = 0 || x;
+    this.r = 10 || r;
     this.canvas = document.getElementById('canvas');
     this.color = color;
 
@@ -52,6 +59,10 @@ class Partical{
 
 
     ctx.fillStyle  =  this.color;
+    // ctx.shadowOffsetX = 1;
+    // ctx.shadowOffsetY = 1;
+    // ctx.shadowBlur    = 10;
+    // ctx.shadowColor   = this.color;
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false)
     ctx.closePath();
@@ -65,6 +76,7 @@ function getRandomColor() {
   for (var i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
+
   return color;
 }
 
@@ -72,13 +84,13 @@ function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-var numParticles = 100
+var numParticles = 1000
 var mass = []
 for (var i = 0; i < numParticles; i++) {
   mass[i] = new Partical(
     getRandomArbitrary(0,canvas.width),
     getRandomArbitrary(0,canvas.height),
-    10,
+    1,
     getRandomColor(),
     1);
 }
@@ -86,8 +98,9 @@ for (var i = 0; i < numParticles; i++) {
 function tic(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (var i = 0; i < mass.length; i++) {
-    mass[i].move()
+    mass[i].move();
   }
+
   requestAnimFrame(tic);
 }
 tic();
